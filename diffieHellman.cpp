@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cmath>
 
+    // Ham tinh modules (a mu b) % c
 int power_modulo(int base, int exponent, int modulus) {
     if (modulus == 1)
         return 0;
@@ -14,21 +15,53 @@ int power_modulo(int base, int exponent, int modulus) {
     }
     return result;
 }
-
+    // Ham kiem tra so nguyen to
+bool isPrime(int n) 
+{
+    if (n <= 1) {
+        return false;
+    }
+    if (n <= 3) {
+        return true;
+    }
+    if (n % 2 == 0 || n % 3 == 0) {
+        return false;
+    }
+    for (int i = 5; i * i <= n; i += 6) {
+        if (n % i == 0 || n % (i + 2) == 0) {
+            return false;
+        }
+    }
+    return true;
+}
 
 int diffie_hellman(int base, int private_key, int prime_modulus) {
     return power_modulo(base, private_key, prime_modulus);
 }
 
 int main() {
-    int base = 5;
-
-    int prime_modulus = 23;
+    int base;
+    int prime_modulus;
     // nhap 2 so tu ban phim
-    // them phan check so nguyen to
-    // co so base la so bat ki, so nguyen to hoac so binh thuong
-    // co so g bat buoc la so nguyen to > base
+    std::cout << "Enter the base: ";
+    std::cin >> base;
+    std::cout << "Enter the large prime base ( > base): ";
+    std::cin >> prime_modulus;
+
+    if (base >= prime_modulus)
+    {
+        std::cout << "ERORR" << std::endl;
+        return 0;
+    }
     
+
+    // kiem tra co so nguyen to
+    if (isPrime(prime_modulus) == false)  
+    {
+        std::cout << "The algorithm does not guarantee security" << std::endl;
+        return 0;
+    }
+
     int alice_private_key = 6;
 
     int bob_private_key = 15;
