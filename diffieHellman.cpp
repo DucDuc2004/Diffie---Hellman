@@ -62,14 +62,19 @@ int main() {
         return 0;
     }
 
-    int alice_private_key = 6;
+    int alice_private_key;
+    int bob_private_key;
+    // Nhap 2 khoa bi mat cua Alice and Bob
+    std::cout << "Enter alice_private_key: ";
+    std::cin >> alice_private_key;
+    std::cout << "Enter bob_private_key: ";
+    std::cin >> bob_private_key;
 
-    int bob_private_key = 15;
-
+    // Goi ham tinh modolus tinh khoa public
     int alice_public_key = diffie_hellman(base, alice_private_key, prime_modulus);
-
     int bob_public_key = diffie_hellman(base, bob_private_key, prime_modulus);
 
+    // Goi ham tinh modulus tinh khoa chia se chung
     int shared_secret_alice = diffie_hellman(bob_public_key, alice_private_key, prime_modulus);
     int shared_secret_bob = diffie_hellman(alice_public_key, bob_private_key, prime_modulus);
 
