@@ -16,7 +16,7 @@ int power_modulo(int base, int exponent, int modulus) {
     return result;
 }
     // Ham kiem tra so nguyen to
-bool isPrime(int n) 
+bool checkPrime(int n) 
 {
     if (n <= 1) {
         return false;
@@ -50,13 +50,13 @@ int main() {
 
     if (base >= prime_modulus)
     {
-        std::cout << "ERORR" << std::endl;
+        std::cout << "!!!! ERORR !!!!!" << std::endl;
         return 0;
     }
     
 
     // kiem tra co so nguyen to
-    if (isPrime(prime_modulus) == false)  
+    if (checkPrime(prime_modulus) == false)  
     {
         std::cout << "The algorithm does not guarantee security" << std::endl;
         return 0;
