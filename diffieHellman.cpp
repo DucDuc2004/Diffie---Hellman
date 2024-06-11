@@ -1,8 +1,25 @@
 #include <iostream>
+#include <string>
+#include <bitset>
 #include <cmath>
 
-    // Ham tinh modules (a mu b) % c
-int power_modulo(int base, int exponent, int modulus) {
+// Chuyển ký tự thành mã nhị phân
+std::string charToBinary(char c) {
+    std::bitset<8> b(c); // Sử dụng 8 bits cho mỗi ký tự ASCII
+    return b.to_string();
+}
+
+// Chuyển chuỗi ký tự thành chuỗi nhị phân
+std::string stringToBinary(const std::string &str) {
+    std::string binaryString = "";
+    for (char c : str) {
+        binaryString += charToBinary(c);
+    }
+    return binaryString;
+}
+
+// Tính toán mô-đun lũy thừa
+int powerModulo(int base, int exponent, int modulus) {
     if (modulus == 1)
         return 0;
     int result = 1;
@@ -15,75 +32,51 @@ int power_modulo(int base, int exponent, int modulus) {
     }
     return result;
 }
-    // Ham kiem tra so nguyen to
-bool checkPrime(int n) 
-{
-    if (n <= 1) {
-        return false;
-    }
-    if (n <= 3) {
-        return true;
-    }
-    if (n % 2 == 0 || n % 3 == 0) {
-        return false;
-    }
-    for (int i = 5; i * i <= n; i += 6) {
-        if (n % i == 0 || n % (i + 2) == 0) {
-            return false;
-        }
-    }
-    return true;
+
+// Tính khóa Diffie-Hellman
+int diffieHellman(int base, int privateKey, int primeModulus) {
+    return powerModulo(base, privateKey, primeModulus);
 }
 
-int diffie_hellman(int base, int private_key, int prime_modulus) {
-    return power_modulo(base, private_key, prime_modulus);
+// Tính toán hệ số nén
+double calculateCompressionRatio(const std::string &inputKey, int outputKeyBits) {
+    std::string binaryInputKey = stringToBinary(inputKey);
+    int inputKeyBits = binaryInputKey.length();
+    return static_cast<double>(inputKeyBits) / outputKeyBits;
 }
 
 int main() {
-    int base;
-    int prime_modulus;
-    // nhap 2 so tu ban phim
-    std::cout << "Enter the base: ";
-    std::cin >> base;
-    std::cout << "Enter the large prime base ( > base): ";
-    std::cin >> prime_modulus;
-
-    if (base >= prime_modulus)
-    {
-        std::cout << "!!!! ERORR !!!!!" << std::endl;
-        return 0;
-    }
+    // Các khóa đầu vào
+    std::string aliceKey = "Alice15";
+    std::string bobKey = "Bob20";
     
+    int base = 5; // Cơ số
+    int primeModulus = 23; // Số nguyên tố lớn
+    
+    int alicePrivateKey = 15; // Khóa riêng của Alice
+    int bobPrivateKey = 20; // Khóa riêng của Bob
 
-    // kiem tra co so nguyen to
-    if (checkPrime(prime_modulus) == false)  
-    {
-        std::cout << "The algorithm does not guarantee security" << std::endl;
-        return 0;
-    }
+    // Tính khóa công khai
+    int alicePublicKey = diffieHellman(base, alicePrivateKey, primeModulus);
+    int bobPublicKey = diffieHellman(base, bobPrivateKey, primeModulus);
 
-    int alice_private_key;
-    int bob_private_key;
-    // Nhap 2 khoa bi mat cua Alice and Bob
-    std::cout << "Enter alice_private_key: ";
-    std::cin >> alice_private_key;
-    std::cout << "Enter bob_private_key: ";
-    std::cin >> bob_private_key;
+    // Tính khóa chung
+    int sharedSecretAlice = diffieHellman(bobPublicKey, alicePrivateKey, primeModulus);
+    int sharedSecretBob = diffieHellman(alicePublicKey, bobPrivateKey, primeModulus);
 
-    // Goi ham tinh modolus tinh khoa public
-    int alice_public_key = diffie_hellman(base, alice_private_key, prime_modulus);
-    int bob_public_key = diffie_hellman(base, bob_private_key, prime_modulus);
+    // Tính hệ số nén
+    double compressionRatioAlice = calculateCompressionRatio(aliceKey, alicePublicKey );
+    double compressionRatioBob = calculateCompressionRatio(bobKey, bobPublicKey);
 
-    // Goi ham tinh modulus tinh khoa chia se chung
-    int shared_secret_alice = diffie_hellman(bob_public_key, alice_private_key, prime_modulus);
-    int shared_secret_bob = diffie_hellman(alice_public_key, bob_private_key, prime_modulus);
-
-    std::cout << "Alice's private key: " << alice_private_key << std::endl;
-    std::cout << "Alice's public key: " << alice_public_key << std::endl;
-    std::cout << "Bob's private key: " << bob_private_key << std::endl;
-    std::cout << "Bob's public key: " << bob_public_key << std::endl;
-    std::cout << "Shared secret calculated by Alice: " << shared_secret_alice << std::endl;
-    std::cout << "Shared secret calculated by Bob: " << shared_secret_bob << std::endl;
+    // Hiển thị kết quả
+    std::cout << "Alice's input key in binary: " << stringToBinary(aliceKey) << std::endl;
+    std::cout << "Bob's input key in binary: " << stringToBinary(bobKey) << std::endl;
+    std::cout << "Alice's public key: " << alicePublicKey << std::endl;
+    std::cout << "Bob's public key: " << bobPublicKey << std::endl;
+    std::cout << "Shared secret (Alice): " << sharedSecretAlice << std::endl;
+    std::cout << "Shared secret (Bob): " << sharedSecretBob << std::endl;
+    std::cout << "Compression ratio for Alice's key: " << compressionRatioAlice << std::endl;
+    std::cout << "Compression ratio for Bob's key: " << compressionRatioBob << std::endl;
 
     return 0;
 }
