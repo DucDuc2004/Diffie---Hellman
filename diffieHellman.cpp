@@ -47,9 +47,13 @@ double calculateCompressionRatio(const std::string &inputKey, int outputKeyBits)
 
 int main() {
     // Các khóa đầu vào
-    std::string aliceKey = "Alice15";
-    std::string bobKey = "Bob20";
-    
+    std::string aliceKey;
+    std::string bobKey;
+    std::cout << "Nhap khoa alice: ";
+    std::cin >> aliceKey;
+    std::cout << "Nhap khoa bob: ";
+    std::cin >> bobKey;
+
     int base = 5; // Cơ số
     int primeModulus = 23; // Số nguyên tố lớn
     
@@ -69,14 +73,14 @@ int main() {
     double compressionRatioBob = calculateCompressionRatio(bobKey, bobPublicKey);
 
     // Hiển thị kết quả
-    std::cout << "Alice's input key in binary: " << stringToBinary(aliceKey) << std::endl;
-    std::cout << "Bob's input key in binary: " << stringToBinary(bobKey) << std::endl;
-    std::cout << "Alice's public key: " << alicePublicKey << std::endl;
-    std::cout << "Bob's public key: " << bobPublicKey << std::endl;
-    std::cout << "Shared secret (Alice): " << sharedSecretAlice << std::endl;
-    std::cout << "Shared secret (Bob): " << sharedSecretBob << std::endl;
-    std::cout << "Compression ratio for Alice's key: " << compressionRatioAlice << std::endl;
-    std::cout << "Compression ratio for Bob's key: " << compressionRatioBob << std::endl;
+    std::cout << "Alice's input key in binary:         | " << stringToBinary(aliceKey) << std::endl;
+    std::cout << "Bob's input key in binary:           | " << stringToBinary(bobKey) << std::endl;
+    std::cout << "Alice's public key:                  | " << alicePublicKey << std::endl;
+    std::cout << "Bob's public key:                    | " << bobPublicKey << std::endl;
+    std::cout << "Shared secret (Alice):               | " << sharedSecretAlice << std::endl;
+    std::cout << "Shared secret (Bob):                 | " << sharedSecretBob << std::endl;
+    std::cout << "Compression ratio for Alice's key:   | " << compressionRatioAlice << std::endl;
+    std::cout << "Compression ratio for Bob's key:     | " << compressionRatioBob << std::endl;
 
     return 0;
 }
